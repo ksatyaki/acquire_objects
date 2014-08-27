@@ -19,6 +19,7 @@
 #include <doro_msgs/ClusterArray.h>
 
 #define DIST2D(x1, y1, x2, y2) sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) )
+#define DIST3D(x1, y1, z1, x2, y2, z2) sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) + (z1-z2)*(z1-z2) )
 /**
  * The class that uses the output of obj_detection
  * and cluster_extraction to create signatures for all
@@ -36,27 +37,27 @@ protected:
 	/**
 	 * A nodehandle to use for the clusters message.
 	 */
-	ros::NodeHandle nh1_;
+	//ros::NodeHandle nh1_;
 
 	/**
 	 * A nodehandle to use for the recognized objects message.
 	 */
-	ros::NodeHandle nh2_;
+	//ros::NodeHandle nh2_;
 
 	/**
 	 * A callback queue for everything else.
 	 */
-	ros::CallbackQueue q_;
+	//ros::CallbackQueue q_;
 
 	/**
 	 * A callback queue to associate to the clusters message.
 	 */
-	ros::CallbackQueue q1_;
+	//ros::CallbackQueue q1_;
 
 	/**
 	 * A callback queue to associate to the recognized objects message.
 	 */
-	ros::CallbackQueue q2_;
+	//ros::CallbackQueue q2_;
 
 	/**
 	 * The Server.
