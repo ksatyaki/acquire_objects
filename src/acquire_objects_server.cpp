@@ -25,6 +25,7 @@ bool AcquireObjectsServer::serverCB(acquire_objects::AcquireObjectsRequest& requ
 {
 	ROS_INFO("Server Called!");
 	bool return_value;
+	std::string object_name = "unknown_object_";
 
 	ros::param::set("/cluster_extraction_enable", true);
 	ros::param::set("/sift_extraction_enable", true);
@@ -48,6 +49,7 @@ bool AcquireObjectsServer::serverCB(acquire_objects::AcquireObjectsRequest& requ
 	ros::param::set("/sift_extraction_enable", false);
 
 	ROS_INFO("Processing...");
+	int unknown_no = 0;
 	for(std::vector<doro_msgs::Cluster>::iterator it_clust = clusters_ptr_->clusters.begin();
 			it_clust != clusters_ptr_->clusters.end();
 			it_clust++)
@@ -77,6 +79,12 @@ bool AcquireObjectsServer::serverCB(acquire_objects::AcquireObjectsRequest& requ
 		if(!associated)
 		{
 			doro_msgs::TableObject __object;
+			char object_number[4];
+			sprintf(object_number, "%d", unknown_no);
+
+			__object.id = object_name + object_number;
+
+			unknown_no++;
 			__object.centroid = it_clust->centroid.point;
 			__object.cluster_size = it_clust->cluster_size;
 
@@ -166,7 +174,7 @@ bool AcquireObjectsServer::serverCB(acquire_objects::AcquireObjectsRequest& requ
 				iter_obj != response.objects.table_objects.end();
 				iter_obj++)
 		{
-			if(iter_obj->id.empty())
+			if(iter_obj->id.empty() || iter_obj->id.find("unknown") != std::string::npos)
 			{
 				response.objects.table_objects.erase(iter_obj);
 				iter_obj--;
