@@ -198,10 +198,10 @@ bool AcquireObjectsServer::serverCB(acquire_objects::AcquireObjectsRequest& requ
 
 	return_value = true;
 
+	ROS_INFO("Response sent.");
+
 	clusters_ptr_.reset();
 	recognized_objects_ptr_.reset();
-
-	ROS_INFO("Response sent.");
 	return return_value;
 }
 
