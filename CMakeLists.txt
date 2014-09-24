@@ -113,6 +113,7 @@ add_executable(acquire_objects_client_test src/acquire_objects_client_test.cc)
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 add_dependencies(acquire_objects_server acquire_objects_generate_messages_cpp)
+add_dependencies(acquire_objects_server doro_msgs_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(acquire_objects_server

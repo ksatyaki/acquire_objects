@@ -27,6 +27,9 @@ bool AcquireObjectsServer::serverCB(acquire_objects::AcquireObjectsRequest& requ
 	bool return_value;
 	std::string object_name = "unknown_object_";
 
+	clusters_ptr_.reset();
+	recognized_objects_ptr_.reset();
+
 	ros::param::set("/cluster_extraction_enable", true);
 	ros::param::set("/sift_extraction_enable", true);
 
@@ -92,15 +95,22 @@ bool AcquireObjectsServer::serverCB(acquire_objects::AcquireObjectsRequest& requ
 		}
 	}
 
+	response.objects.number_of_objects = response.objects.table_objects.size();
+
 	if(request.signature.id == "signature")
 	{
-		if(request.signature.cluster_size != 0.0)
+		if(request.signature.cluster_size.size() != 0)
 		{
 			for(std::vector<doro_msgs::TableObject>::iterator iter_obj = response.objects.table_objects.begin();
 					iter_obj != response.objects.table_objects.end();
 					iter_obj++)
 			{
-				if(iter_obj->cluster_size > (250 + request.signature.cluster_size) || iter_obj->cluster_size < (request.signature.cluster_size - 250))
+				if(iter_obj->cluster_size[0] > (0.025 + request.signature.cluster_size[0]) ||
+					iter_obj->cluster_size[0] < (request.signature.cluster_size[0] - 0.025) ||
+					iter_obj->cluster_size[1] > (0.025 + request.signature.cluster_size[1]) ||
+					iter_obj->cluster_size[1] < (request.signature.cluster_size[1] - 0.025) ||
+					iter_obj->cluster_size[2] > (0.025 + request.signature.cluster_size[2]) ||
+					iter_obj->cluster_size[2] < (request.signature.cluster_size[2] - 0.025) )
 				{
 					// If the size is out of bounds, remove it.
 					response.objects.table_objects.erase(iter_obj);
